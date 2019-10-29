@@ -1,0 +1,269 @@
+//##########################################################################
+//#                                                                        #
+//#                              CLOUDCOMPARE                              #
+//#                                                                        #
+//#  This program is free software; you can redistribute it and/or modify  #
+//#  it under the terms of the GNU General Public License as published by  #
+//#  the Free Software Foundation; version 2 or later of the License.      #
+//#                                                                        #
+//#  This program is distributed in the hope that it will be useful,       #
+//#  but WITHOUT ANY WARRANTY; without even the implied warranty of        #
+//#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the          #
+//#  GNU General Public License for more details.                          #
+//#                                                                        #
+//#          COPYRIGHT: EDF R&D / TELECOM ParisTech (ENST-TSI)             #
+//#                                                                        #
+//##########################################################################
+
+#include "..\include\FileIOFilter.h"
+//Qt
+#include <fstream>
+
+//system
+#include <cassert>
+#include <vector>
+
+//! Available filters
+/** Filters are uniquely recognized by their 'file filter' string.
+	We use a std::vector so as to keep the insertion ordering!
+**/
+static FileIOFilter::FilterContainer s_ioFilters;
+
+
+std::vector< std::string > FileIOFilter::getFileFilters( bool onImport ) const
+{
+	std::vector<std::string > vec;
+	if ( onImport )
+	{
+		for (FilterContainer::const_iterator it = s_ioFilters.begin(); it != s_ioFilters.end(); ++it)
+		{
+			std::string  otherFilters = (*it)->getFileFilter(onImport);
+			vec.push_back(otherFilters);
+		}
+	}
+	
+	return vec;
+}
+
+void FileIOFilter::InitInternalFilters()
+{
+	//from the most useful to the less one!
+	//Register(Shared(new AsciiFilter()));
+	//Register(Shared(new PlyFilter()));
+	//Register(Shared(new STLFilter()));
+	//Register(Shared(new OBJFilter()));
+}
+
+void FileIOFilter::Register(Shared filter)
+{
+	if (!filter)
+	{
+		assert(false);
+		return;
+	}
+
+	// check for an existing copy of this filter or one with the same ID
+	const std::string id = filter->uid;
+
+	auto compareFilters = [filter, id] ( const Shared& filter2 )
+	{
+		return (filter == filter2) || (filter2->uid == id);
+	};
+	
+	if ( std::any_of( s_ioFilters.cbegin(), s_ioFilters.cend(), compareFilters ) ) 
+	{
+		return;
+	}
+	s_ioFilters.push_back( filter );
+}
+
+void FileIOFilter::UnregisterAll()
+{
+	for (auto & filter : s_ioFilters)
+	{
+		filter->unregister();
+	}
+	
+	s_ioFilters.clear();
+}
+
+FileIOFilter::Shared FileIOFilter::GetFilter(const std::string& fileFilter, bool onImport)
+{
+	if (!fileFilter.empty())
+	{
+		for (FilterContainer::const_iterator it = s_ioFilters.begin(); it != s_ioFilters.end(); ++it)
+		{
+			std::string otherFilters = (*it)->getFileFilter(onImport);
+			if (otherFilters == fileFilter)
+				return  *it;
+		}
+	}
+
+	return Shared(nullptr);
+}
+
+const FileIOFilter::FilterContainer& FileIOFilter::GetFilters()
+{
+	return s_ioFilters;
+}
+
+FileIOFilter::Shared FileIOFilter::FindBestFilterForExtension(const std::string& ext)
+{
+	std::string lowerEXT;
+	std::transform(ext.begin(), ext.end(), lowerEXT.begin(), ::tolower);
+	
+	for ( const auto &filter : s_ioFilters )
+	{
+		std::string otherFilters = filter->getDefaultExtension();
+		if (otherFilters == ext)
+			return  filter;
+	}
+
+	return FileIOFilter::Shared( nullptr );
+}
+
+ModelObject* FileIOFilter::LoadFromFile(const std::string& filename,
+										LoadParameters& loadParameters,
+										Shared filter,
+										CC_FILE_ERROR& result)
+{
+	if (!filter)
+	{
+		result = CC_FERR_CONSOLE_ERROR;
+		assert(false);
+		return nullptr;
+	}
+
+	//check file existence
+	std::ifstream fi(filename);
+	if (!fi.good())
+	{
+		fi.close();
+		result = CC_FERR_CONSOLE_ERROR;
+		return nullptr;
+	}
+	ModelObject *container = nullptr;
+	try
+	{
+		result = filter->loadFile(filename,
+							container,
+							loadParameters);
+	}
+	catch (const std::exception& e)
+	{
+		if (container)
+		{
+			delete container;
+		}
+		result = CC_FERR_CONSOLE_ERROR;
+	}
+	catch (...)
+	{
+		if (container)
+		{
+			delete container;
+		}
+		result = CC_FERR_CONSOLE_ERROR;
+	}
+
+	if (result == CC_FERR_NO_ERROR)
+	{
+		std::cout << "no error " << std::endl;
+	}
+	
+	return container;
+}
+
+
+ModelObject* FileIOFilter::LoadFromFile(const std::string& filename,
+										LoadParameters& loadParameters,
+										CC_FILE_ERROR& result,
+										const std::string fileFilter )
+{
+	Shared filter(nullptr);
+	
+	//if the right filter is specified by the caller
+	if (!fileFilter.empty())
+	{
+		filter = GetFilter(fileFilter, true);
+		if (!filter)
+		{
+			result = CC_FERR_CONSOLE_ERROR;
+			return nullptr;
+		}
+	}
+	else //we need to guess the I/O filter based on the file format
+	{
+		//look for file extension (we trust Qt on this task)
+		std::string::size_type pos = filename.find_last_of(".");
+		std::string extension = filename.substr(pos+1);
+		if (pos==std::string::npos || extension.empty())
+		{
+			result = CC_FERR_CONSOLE_ERROR;
+			return nullptr;
+		}
+		//convert extension to file format
+		filter = FindBestFilterForExtension(extension);
+		//unknown extension?
+		if (!filter)
+		{
+			result = CC_FERR_CONSOLE_ERROR;
+			return nullptr;
+		}
+	}
+
+	return LoadFromFile(filename, loadParameters, filter, result);
+}
+
+CC_FILE_ERROR FileIOFilter::SaveToFile(	ModelObject* entities,
+										const std::string& filename,
+										const SaveParameters& parameters,
+										Shared filter)
+{
+	if (!entities || filename.empty() || !filter)
+		return CC_FERR_BAD_ARGUMENT;
+
+	//if the file name has no extension, we had a default one!
+	std::string completeFileName(filename);
+	std::string::size_type pos = completeFileName.find_last_of(".");
+	
+	if (std::string::npos == pos)
+		completeFileName += filter->getDefaultExtension();
+
+	CC_FILE_ERROR result = CC_FERR_NO_ERROR;
+	try
+	{
+		result = filter->saveToFile(entities, completeFileName, parameters);
+	}
+	catch(...)
+	{
+		std::cout << "[I/O] CC has caught an unhandled exception while saving file " + filename << std::endl;
+		result = CC_FERR_CONSOLE_ERROR;
+	}
+
+	if (result == CC_FERR_NO_ERROR)
+	{
+		std::cout << "[I/O] File '%1' saved successfully" + filename << std::endl;
+	}
+
+	return result;
+}
+
+CC_FILE_ERROR FileIOFilter::SaveToFile(	ModelObject* entities,
+										const std::string& filename,
+										const SaveParameters& parameters,
+										const std::string& fileFilter)
+{
+	if (fileFilter.empty())
+		return CC_FERR_BAD_ARGUMENT;
+
+	Shared filter = GetFilter(fileFilter,false);
+	if (!filter)
+	{
+		std::cout << "[Load] Internal error: no filter corresponds to filter  " + fileFilter << std::endl;
+		return CC_FERR_UNKNOWN_FILE;
+	}
+
+	return SaveToFile(entities, filename, parameters, filter);
+}
+
