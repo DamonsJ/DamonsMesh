@@ -4,6 +4,9 @@
 #include "..\..\DamonsMath\include\DamonsPoint.h"
 #include "..\..\DamonsMath\include\DamonsBox.h"
 #include "..\include\damons_db.h"
+
+#include "..\include\MeshDefines.h"
+
 #include <iostream>
 #include <memory>
 
@@ -106,7 +109,7 @@ namespace DMeshLib {
 		// @return: void
 		// @param : void  
 		//************************************ 
-		DGraphic::DBox<float> getBoundBox() const { return m_box; }
+		DGraphic::DBox<data_type> getBoundBox() const { return m_box; }
 		//************************************  
 		// @brief : using for refresh bound box
 		// @author: SunHongLei
@@ -135,7 +138,7 @@ namespace DMeshLib {
 		unsigned m_uniqueID;
 		std::string m_name;
 
-		DGraphic::DBox<float> m_box;
+		DGraphic::DBox<data_type > m_box;
 	};
 }
 #endif// 2019/07/19
