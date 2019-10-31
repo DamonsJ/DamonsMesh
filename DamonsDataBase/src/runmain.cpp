@@ -8,11 +8,11 @@
 using namespace  DMeshLib;
 int main(int argc, char **argv) {
 
-	using halfedge_pairs = std::map< std::pair<DMeshLib::index_type, DMeshLib::index_type>, DMeshLib::index_type >;
-	halfedge_pairs m_edgePairs;
-	
-	std::pair<DMeshLib::index_type, DMeshLib::index_type> p = std::make_pair(0, 1);
-	m_edgePairs[p] = index_type(0);
+	//using halfedge_pairs = std::map< std::pair<DMeshLib::index_type, DMeshLib::index_type>, DMeshLib::index_type >;
+	//halfedge_pairs m_edgePairs;
+	//
+	//std::pair<DMeshLib::index_type, DMeshLib::index_type> p = std::make_pair(0, 1);
+	//m_edgePairs[p] = index_type(0);
 	//std::pair<DMeshLib::index_type, DMeshLib::index_type> p1 = std::make_pair(1, 0);
 	//m_edgePairs[p1] = index_type(1);
 	//
@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
 	//m_edgePairs[p2] = index_type(2);
 
 
-	std::string filename = "../data/test.off";
+	std::string filename = "../data/circle.off";
 	std::ifstream infile(filename);
 	std::string sline;
 	std::getline(infile, sline);
@@ -64,8 +64,13 @@ int main(int argc, char **argv) {
 		}
 	}
 
+	int vindex = 527;
 	mesh->build();
+	std::vector<index_type>  vts = mesh->vertex_vertex(vindex);
+	std::vector<index_type>  fts = mesh->vertex_face(vindex);
+	std::vector<index_type>  ffs = mesh->face_face(vindex);
 
+	std::vector< std::vector<index_type > > bnd = mesh->findBoundary();
 	if (mesh) {
 		delete mesh;
 	}
