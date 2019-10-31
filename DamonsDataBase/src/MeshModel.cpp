@@ -64,6 +64,9 @@ namespace DMeshLib {
 	}
 
 	void MeshModel::build() {
+		m_edgePairs.clear();
+		m_halfedges.clear();
+		m_halfedges.shrink_to_fit();
 
 		for (int fid = 0; fid < m_meshIndex.size(); ++fid)
 		{

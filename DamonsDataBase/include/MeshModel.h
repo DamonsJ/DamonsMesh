@@ -156,6 +156,19 @@ namespace DMeshLib {
 			p2 = m_meshPoints[yindex];
 			p3 = m_meshPoints[zindex];
 		}
+		void getTriangleVertices(unsigned int index, DGraphic::DPoint<data_type> &p1, DGraphic::DPoint<data_type> &p2, DGraphic::DPoint<data_type> &p3) {
+			assert(index < m_meshIndex.size());
+			index_type xindex = m_meshIndex[index].point_ids[0];
+			index_type yindex = m_meshIndex[index].point_ids[1];
+			index_type zindex = m_meshIndex[index].point_ids[2];
+			DMeshLib::DamonsVertex t1 = m_meshPoints[xindex];
+			DMeshLib::DamonsVertex t2 = m_meshPoints[yindex];
+			DMeshLib::DamonsVertex t3 = m_meshPoints[zindex];
+
+			p1[0] = t1.x; p1[1] = t1.y; p1[2] = t1.z;
+			p2[0] = t2.x; p2[1] = t2.y; p2[2] = t2.z;
+			p3[0] = t3.x; p3[1] = t3.y; p3[2] = t3.z;
+		}
 		// get element
 		unsigned int getElementVertexNumber(unsigned int index) {
 			assert(index < m_meshIndex.size());
@@ -171,6 +184,17 @@ namespace DMeshLib {
 			return m_meshIndex[index].point_ids;
 		}
 	
+	public:
+		//************************************  
+		// @brief : where this mesh has normals
+		// @author: SunHongLei
+		// @date  : 2019/10/31  
+		// @return: void
+		// @param : void  
+		//************************************ 
+		bool hasNormals() const {
+			return m_meshNormals.size() > 0;
+		}
 	public:
 		//////////////////////////////////////////////////////////////////////////
 		//half-edge info
@@ -306,7 +330,7 @@ namespace DMeshLib {
 		}
 
 		//************************************  
-		// @brief :  
+		// @brief : find all the adjacent faces 
 		// @author: SunHongLei
 		// @date  : 2019/10/31  
 		// @return: void
