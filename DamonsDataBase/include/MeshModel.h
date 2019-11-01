@@ -33,7 +33,7 @@ namespace DMeshLib {
 		halfedge_pairs m_edgePairs;
 		
 	public:
-		MeshModel(std::string name = "");
+		MeshModel(std::string name = "") :ModelObject((name.empty() ? "unnamed_mesh" : name)) {}
 		MeshModel(const MeshModel& object);
 		~MeshModel();
 

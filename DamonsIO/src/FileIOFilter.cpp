@@ -1,4 +1,5 @@
 #include "..\include\FileIOFilter.h"
+#include "..\include\STLFilter.h"
 #include <fstream>
 
 //system
@@ -30,7 +31,7 @@ namespace DamonsIO {
 		//from the most useful to the less one!
 		//Register(Shared(new AsciiFilter()));
 		//Register(Shared(new PlyFilter()));
-		//Register(Shared(new STLFilter()));
+		Register(Shared(new STLFilter()));
 		//Register(Shared(new OBJFilter()));
 	}
 
@@ -85,6 +86,18 @@ namespace DamonsIO {
 	const FileIOFilter::FilterContainer& FileIOFilter::GetFilters()
 	{
 		return s_ioFilters;
+	}
+
+	const std::vector< std::string > FileIOFilter::GetAllFilters() {
+		std::vector<std::string > vec;
+
+		for (FilterContainer::const_iterator it = s_ioFilters.begin(); it != s_ioFilters.end(); ++it)
+		{
+			std::string  otherFilters = (*it)->getFileFilter();
+			vec.push_back(otherFilters);
+		}
+
+		return vec;
 	}
 
 	FileIOFilter::Shared FileIOFilter::FindBestFilterForExtension(const std::string& ext)

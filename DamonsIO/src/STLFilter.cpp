@@ -188,7 +188,9 @@ namespace DamonsIO {
 	{
 
 		bool ascii = IsSTLBinary(filename.c_str());
+
 		DMeshLib::MeshModel* mesh = new DMeshLib::MeshModel("stl_mesh");
+
 		DAMONS_FILE_ERROR error = CC_FERR_NO_ERROR;
 		if (ascii)
 			error = loadASCIIFile(filename, mesh, parameters);

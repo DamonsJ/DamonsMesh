@@ -58,6 +58,7 @@ namespace DamonsIO {
 				, preserveShiftOnSave(true)
 				, autoComputeNormals(false)
 				, sessionStart(true)
+				, process(0.0)
 			{}
 
 			//! Wether to always display a dialog (if any), even if automatic guess is possible
@@ -68,6 +69,8 @@ namespace DamonsIO {
 			bool autoComputeNormals;
 			//! Session start (whether the load action is the first of a session)
 			bool sessionStart;
+			//! load process
+			double process;
 		};
 
 		//! Generic saving parameters
@@ -249,7 +252,7 @@ namespace DamonsIO {
 
 		//! Returns the set of all registered filters
 		DAMONS_IO_LIB_API static const FilterContainer& GetFilters();
-
+		DAMONS_IO_LIB_API static const std::vector< std::string > GetAllFilters();
 		//! Unregisters all filters
 		/** Should be called at the end of the application
 		**/

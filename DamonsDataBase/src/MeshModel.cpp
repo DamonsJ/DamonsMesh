@@ -4,9 +4,9 @@
 
 //////////////////////////////////////////////////////////////////////////
 namespace DMeshLib {
-	MeshModel::MeshModel(std::string name /*= ""*/) :ModelObject(name.empty() ? "unnamed_mesh" : name) {
-	
-	}
+// 	MeshModel::MeshModel(std::string name /*= ""*/) :ModelObject((name.empty() ? "unnamed_mesh" : name)) {
+// 	
+// 	}
 
 	MeshModel::MeshModel(const MeshModel& object) : ModelObject(object) {
 		std::copy(object.m_meshPoints.begin(), object.m_meshPoints.end(), std::back_inserter(m_meshPoints));

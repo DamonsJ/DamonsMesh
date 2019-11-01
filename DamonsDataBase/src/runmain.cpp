@@ -26,8 +26,7 @@ int main(int argc, char **argv) {
 	std::getline(infile, sline);
 	std::getline(infile, sline);
 
-	MeshModel *mesh = new MeshModel;
-
+	MeshModel *mesh = new MeshModel("stl_mesh");
 	std::istringstream iss(sline);
 	int vertexNum = 0, faceNum = 0;
 	if (!(iss >> vertexNum >> faceNum))

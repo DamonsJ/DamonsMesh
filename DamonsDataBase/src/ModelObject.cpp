@@ -1,8 +1,8 @@
 #include "..\include\ModelObject.h"
 #include <stdexcept>
 
-namespace DMeshLib {
 
+namespace DMeshLib {
 	//! Default unique ID generator (using the system persistent settings as we did previously proved to be not reliable)
 	static UniqueIDGenerator::Shared s_uniqueIDGenerator(new UniqueIDGenerator);
 
@@ -33,6 +33,7 @@ namespace DMeshLib {
 	}
 
 	//////////////////////////////////////////////////////////////////////////
+
 	ModelObject::ModelObject(std::string name /*= ""*/)
 		: m_name(name.empty() ? "unnamed" : name)
 		, m_uniqueID(GetNextUniqueID())

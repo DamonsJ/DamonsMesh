@@ -72,8 +72,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(VTK_ROOT)\include;$(PCL_ROOT)\include;$(BOOST_ROOT)\include;$(QT_ROOT)\include;..\DamonsDataBase\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(VTK_ROOT)\lib;$(PCL_ROOT)\lib;$(BOOST_ROOT)\lib;$(QT_ROOT)\lib;..\..\DamonsDataBase\lib;$(LibraryPath)</LibraryPath>
-    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>$(VTK_ROOT)\lib;$(PCL_ROOT)\lib;$(BOOST_ROOT)\lib;..\..\DamonsDataBase\lib;$(QT_ROOT)\lib;$(LibraryPath)</LibraryPath>
