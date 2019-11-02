@@ -87,7 +87,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;DAMONS_DB_USE_AS_DLL;DAMONS_DB_LIB_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>DamonsDataBase-gd.lib;%(AdditionalDependencies)</AdditionalDependencies>

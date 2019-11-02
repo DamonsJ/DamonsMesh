@@ -140,5 +140,6 @@ namespace DMeshLib {
 
 		DGraphic::DBox<data_type > m_box;
 	};
+
 }
 #endif// 2019/07/19

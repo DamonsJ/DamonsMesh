@@ -165,8 +165,7 @@ namespace DamonsIO {
 		/* Check for binary or ASCII file */
 		fseek(fp, STL_LABEL_SIZE, SEEK_SET);
 		fread(&facenum, sizeof(unsigned int), 1, fp);
-
-		// second check, sometimes the size is a bit wrong, 
+		
 		// lets'make a test to check that we find only ascii stuff before assuming it is ascii
 		unsigned char tmpbuf[1000];
 		int byte_to_read = std::min(int(sizeof(tmpbuf)), int(file_size - 80));
@@ -192,7 +191,7 @@ namespace DamonsIO {
 		DMeshLib::MeshModel* mesh = new DMeshLib::MeshModel("stl_mesh");
 
 		DAMONS_FILE_ERROR error = CC_FERR_NO_ERROR;
-		if (ascii)
+		if (!ascii)
 			error = loadASCIIFile(filename, mesh, parameters);
 		else
 			error = loadBinaryFile(filename, mesh, parameters);

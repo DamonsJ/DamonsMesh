@@ -16,15 +16,20 @@ int main(int argc, char **argv) {
 			break;
 		}
 	}
-	std::string meshname = "aaa";
-	DMeshLib::MeshModel* mesh = new DMeshLib::MeshModel(meshname);
+
 	DamonsIO::FileIOFilter::LoadParameters parameters;
 	{
 		parameters.alwaysDisplayLoadDialog = true;
 	}
 	DamonsIO::DAMONS_FILE_ERROR result = DamonsIO::CC_FERR_NO_ERROR;
 	std::string filename = "D:\\Program Files (x86)\\OpenCASCADE-7.3.0-vc14-64\\opencascade-7.3.0\\data\\stl\\bearing.stl";
-	DamonsIO::FileIOFilter::LoadFromFile(filename,parameters, result,curfilter);
+	DMeshLib::ModelObject* mesh = DamonsIO::FileIOFilter::LoadFromFile(filename,parameters, result,curfilter);
+
+	if (mesh) {
+		delete mesh;
+		mesh = nullptr;
+	}
+
 	system("pause");
 	return 0;
 }

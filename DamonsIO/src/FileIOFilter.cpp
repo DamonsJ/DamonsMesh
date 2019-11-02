@@ -136,6 +136,7 @@ namespace DamonsIO {
 			result = CC_FERR_CONSOLE_ERROR;
 			return nullptr;
 		}
+		fi.close();
 		DMeshLib::ModelObject *mobj = nullptr;
 		try
 		{
@@ -158,9 +159,9 @@ namespace DamonsIO {
 			result = CC_FERR_CONSOLE_ERROR;
 		}
 
-		if (result == CC_FERR_NO_ERROR)
+		if (result != CC_FERR_NO_ERROR)
 		{
-			std::cout << "no error " << std::endl;
+			std::cout << " error happened" << std::endl;
 		}
 
 		return mobj;
