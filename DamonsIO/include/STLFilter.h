@@ -2,7 +2,6 @@
 #define CC_STL_FILTER_HEADER
 
 #include "..\include\FileIOFilter.h"
-#include "..\include\qtHeaders.h"
 #include "..\..\DamonsDataBase\include\MeshModel.h"
 
 namespace DamonsIO {
@@ -21,14 +20,12 @@ namespace DamonsIO {
 		}
 	public:
 
-		//static accessors
-		static inline std::string GetFileFilter() { return "STL mesh (*.stl)"; }
 		//inherited from FileIOFilter
 		virtual bool importSupported() const override { return true; }
 		virtual bool exportSupported() const override { return true; }
 		virtual DAMONS_FILE_ERROR loadFile(const std::string& filename, DMeshLib::ModelObject *&container, LoadParameters& parameters) override;
 		virtual DAMONS_FILE_ERROR saveToFile(DMeshLib::ModelObject* entity, const std::string& filename, const SaveParameters& parameters) override;
-		virtual  std::string  getFileFilter() const override { return "stl"; }
+		virtual std::string getFileFilter() const override { return "STL mesh (*.stl)"; }
 		virtual std::string getDefaultExtension() const override { return "stl"; }
 		virtual bool canLoadExtension(const std::string& upperCaseExt) const override;
 

@@ -1,323 +1,192 @@
-//##########################################################################
-//#                                                                        #
-//#                              CLOUDCOMPARE                              #
-//#                                                                        #
-//#  This program is free software; you can redistribute it and/or modify  #
-//#  it under the terms of the GNU General Public License as published by  #
-//#  the Free Software Foundation; version 2 or later of the License.      #
-//#                                                                        #
-//#  This program is distributed in the hope that it will be useful,       #
-//#  but WITHOUT ANY WARRANTY; without even the implied warranty of        #
-//#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the          #
-//#  GNU General Public License for more details.                          #
-//#                                                                        #
-//#          COPYRIGHT: EDF R&D / TELECOM ParisTech (ENST-TSI)             #
-//#                                                                        #
-//##########################################################################
-
-#include "OFFFilter.h"
-
-//qCC_db
-#include <ccLog.h>
-#include <ccMesh.h>
-#include <ccNormalVectors.h>
-#include <ccOctree.h>
-#include <ccPointCloud.h>
+#include "..\include\OFFFilter.h"
 
 //System
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
 
-bool OFFFilter::canLoadExtension(const QString& upperCaseExt) const
-{
-	return (upperCaseExt == "OFF");
-}
+namespace DamonsIO {
 
-bool OFFFilter::canSave(CC_CLASS_ENUM type, bool& multiple, bool& exclusive) const
-{
-	if (type == CC_TYPES::MESH)
+	bool OFFFilter::canLoadExtension(const std::string& upperCaseExt) const
 	{
-		multiple = false;
-		exclusive = true;
-		return true;
-	}
-	return false;
-}
-
-CC_FILE_ERROR OFFFilter::saveToFile(ccHObject* entity, const QString& filename, const SaveParameters& parameters)
-{
-	if (!entity)
-		return CC_FERR_BAD_ARGUMENT;
-
-	if (!entity->isKindOf(CC_TYPES::MESH))
-	{
-		ccLog::Warning("[OFF] This filter can only save one mesh at a time!");
-		return CC_FERR_BAD_ENTITY_TYPE;
+		return (upperCaseExt == "OFF");
 	}
 
-	ccGenericMesh* mesh = ccHObjectCaster::ToGenericMesh(entity);
-	if (!mesh || mesh->size() == 0)
+
+	DAMONS_FILE_ERROR OFFFilter::saveToFile(DMeshLib::ModelObject* entity, const std::string& filename, const SaveParameters& parameters)
 	{
-		ccLog::Warning("[OFF] Input mesh is empty!");
-		return CC_FERR_NO_SAVE;
-	}
-	ccGenericPointCloud* vertices = mesh->getAssociatedCloud();
-	if (!vertices || vertices->size() == 0)
-	{
-		ccLog::Warning("[OFF] Input mesh has no vertices?!");
-		return CC_FERR_NO_SAVE;
-	}
+		if (!entity)
+			return CC_FERR_BAD_ARGUMENT;
 
-	//try to open file for saving
-	QFile fp(filename);
-	if (!fp.open(QIODevice::WriteOnly | QIODevice::Text))
-		return CC_FERR_WRITING;
-
-	QTextStream stream(&fp);
-	stream.setRealNumberNotation(QTextStream::FixedNotation);
-	stream.setRealNumberPrecision(12); //TODO: ask the user?
-
-	//header: "OFF"
-	stream << "OFF" << endl;
-
-	//2nd line: vertices count / faces count / edges count
-	unsigned vertCount = vertices->size();
-	unsigned triCount = mesh->size();
-	stream << vertCount << ' ' << triCount << ' ' << 0 << endl;
-
-	//save vertices
-	{
-		for (unsigned i = 0; i < vertCount; ++i)
+		if (!entity->isA(DMeshLib::DB_TYPES::MESH))
 		{
-			const CCVector3* P = vertices->getPoint(i);
-			CCVector3d Pglobal = vertices->toGlobal3d<PointCoordinateType>(*P);
-			stream << Pglobal.x << ' ' << Pglobal.y << ' ' << Pglobal.z << endl;
+			std::cerr<<"[OFF] This filter can only save one mesh at a time!";
+			return CC_FERR_BAD_ENTITY_TYPE;
 		}
-	}
 
-	//save triangles
-	{
-		for (unsigned i = 0; i < triCount; ++i)
+		DMeshLib::MeshModel* mesh =static_cast<DMeshLib::MeshModel*>(entity);
+		if (!mesh || mesh->getTriangleNumber() == 0)
 		{
-			const CCLib::VerticesIndexes* tsi = mesh->getTriangleVertIndexes(i);
-			stream << "3 " << tsi->i1 << ' ' << tsi->i2 << ' ' << tsi->i3 << endl;
+			std::cerr << "[OFF] Input mesh is empty!";
+			return CC_FERR_NO_SAVE;
 		}
-	}
 
-	return CC_FERR_NO_ERROR;
-}
+		std::ofstream fout(filename);
+		//header: "OFF"
+		fout << "OFF" << std::endl;
 
+		//2nd line: vertices count / faces count / edges count
+		unsigned vertCount = mesh->getPointsNumber();
+		unsigned triCount = mesh->getTriangleNumber();
+		fout << vertCount << ' ' << triCount << ' ' << 0 << std::endl;
 
-static QString GetNextLine(QTextStream& stream)
-{
-	QString currentLine;
-	//skip comments
-	do
-	{
-		currentLine = stream.readLine();
-		//end of file?
-		if (currentLine.isNull())
-			return QString();
-	}
-	while (currentLine.startsWith("#") || currentLine.isEmpty());
-
-	return currentLine;
-}
-
-CC_FILE_ERROR OFFFilter::loadFile(const QString& filename, ccHObject& container, LoadParameters& parameters)
-{
-	//try to open file
-	QFile fp(filename);
-	if (!fp.open(QIODevice::ReadOnly | QIODevice::Text))
-		return CC_FERR_READING;
-
-	QTextStream stream(&fp);
-
-	QString currentLine = stream.readLine();
-	if (!currentLine.toUpper().startsWith("OFF"))
-		return CC_FERR_MALFORMED_FILE;
-
-	//check if the number of vertices/faces/etc. are on the first line (yes it happens :( )
-	QStringList tokens = currentLine.split(QRegExp("\\s+"),QString::SkipEmptyParts);
-	if (tokens.size() == 4)
-	{
-		tokens.removeAt(0);
-	}
-	else
-	{
-		currentLine = GetNextLine(stream);
-
-		//end of file already?!
-		if (currentLine.isNull())
-			return CC_FERR_MALFORMED_FILE;
-
-		//read the number of vertices/faces
-		tokens = currentLine.split(QRegExp("\\s+"),QString::SkipEmptyParts);
-		if (tokens.size() < 2/*3*/) //should be 3 but we only use the 2 firsts...
-			return CC_FERR_MALFORMED_FILE;
-	}
-
-	bool ok = false;
-	unsigned vertCount = tokens[0].toUInt(&ok);
-	if (!ok)
-		return CC_FERR_MALFORMED_FILE;
-	unsigned triCount = tokens[1].toUInt(&ok);
-	if (!ok)
-		return CC_FERR_MALFORMED_FILE;
-
-	//create cloud and reserve some memory
-	ccPointCloud* vertices = new ccPointCloud("vertices");
-	if (!vertices->reserve(vertCount))
-	{
-		delete vertices;
-		return CC_FERR_NOT_ENOUGH_MEMORY;
-	}
-
-	//read vertices
-	{
-		CCVector3d Pshift(0, 0, 0);
-		for (unsigned i = 0; i < vertCount; ++i)
+		//save vertices
 		{
-			currentLine = GetNextLine(stream);
-			tokens = currentLine.split(QRegExp("\\s+"),QString::SkipEmptyParts);
-			if (tokens.size() < 3)
+			DMeshLib::data_type x, y, z;
+			for (unsigned i = 0; i < vertCount; ++i)
 			{
-				delete vertices;
-				return CC_FERR_MALFORMED_FILE;
+				mesh->getPoint(i, x, y, z);
+				fout << x << ' ' << y << ' ' << z << std::endl;
 			}
+		}
 
-			//read vertex
-			CCVector3d Pd(0, 0, 0);
+		//save triangles
+		{
+			DMeshLib::index_type id1, id2, id3;
+			for (unsigned i = 0; i < triCount; ++i)
 			{
-				bool vertexIsOk = false;
-				Pd.x = tokens[0].toDouble(&vertexIsOk);
-				if (vertexIsOk)
+				mesh->getTriangleIndex(i, id1, id2, id3);
+				fout << "3 " << id1 << ' ' << id2 << ' ' << id3 << std::endl;
+			}
+		}
+
+		fout.close();
+
+		return CC_FERR_NO_ERROR;
+	}
+
+
+	static std::string GetNextLine(std::ifstream& stream)
+	{
+		std::string currentLine;
+		//skip comments
+		do
+		{
+			if (!std::getline(stream, currentLine))
+				return "";
+		} while (currentLine[0] == '#' || currentLine.empty());
+
+		return currentLine;
+	}
+
+	DAMONS_FILE_ERROR OFFFilter::loadFile(const std::string& filename, DMeshLib::ModelObject *&container, LoadParameters& parameters)
+	{
+		std::ifstream fin(filename);
+		if (!fin.is_open()) {
+			fin.close();
+			return CC_FERR_READING;
+		}
+
+		std::string currentLine;
+		std::getline(fin, currentLine);
+		std::transform(currentLine.begin(), currentLine.end(), currentLine.begin(),::toupper);
+		std::string token = currentLine.substr(0, 3);
+		if (token != "OFF")
+			return CC_FERR_MALFORMED_FILE;
+
+		// find next line 
+		std::string tokens = GetNextLine(fin);
+		unsigned vertCount = 0, triCount = 0;
+		std::stringstream ss(tokens);
+		ss >> vertCount >> triCount;
+
+		if (!(ss >> vertCount >> triCount))
+			return CC_FERR_MALFORMED_FILE;
+		
+		DMeshLib::MeshModel* mesh = new DMeshLib::MeshModel("off_mesh");
+		mesh->ResizePoints(vertCount);
+
+		//read vertices
+		{
+			DMeshLib::data_type x, y, z;
+			for (unsigned i = 0; i < vertCount; ++i)
+			{
+				currentLine = GetNextLine(fin);
+				std::stringstream sstrm(currentLine);
+				sstrm >> x >> y >> z;
+				if (!(sstrm >> x >> y >> z))
 				{
-					Pd.y = tokens[1].toDouble(&vertexIsOk);
-					if (vertexIsOk)
-						Pd.z = tokens[2].toDouble(&vertexIsOk);
-				}
-				if (!vertexIsOk)
-				{
-					delete vertices;
+					delete mesh;
+					mesh = nullptr;
+					container = mesh;
 					return CC_FERR_MALFORMED_FILE;
 				}
+				mesh->setPoint(i, x, y, z);
 			}
-
-			//first point: check for 'big' coordinates
-			if (i == 0)
-			{
-				bool preserveCoordinateShift = true;
-				if (HandleGlobalShift(Pd, Pshift, preserveCoordinateShift, parameters))
-				{
-					if (preserveCoordinateShift)
-					{
-						vertices->setGlobalShift(Pshift);
-					}
-					ccLog::Warning("[OFF] Cloud has been recentered! Translation: (%.2f ; %.2f ; %.2f)", Pshift.x, Pshift.y, Pshift.z);
-				}
-			}
-
-			CCVector3 P = CCVector3::fromArray((Pd + Pshift).u);
-			vertices->addPoint(P);
 		}
-	}
-
-	ccMesh* mesh = new ccMesh(vertices);
-	mesh->addChild(vertices);
-	if (!mesh->reserve(triCount))
-	{
-		delete mesh;
-		return CC_FERR_NOT_ENOUGH_MEMORY;
-	}
-
-	//load triangles
-	{
-		bool ignoredPolygons = false;
-		for (unsigned i=0; i<triCount; ++i)
+		//mesh->ResizeTriangles(triCount);
+		//load triangles
 		{
-			currentLine = GetNextLine(stream);
-			tokens = currentLine.split(QRegExp("\\s+"),QString::SkipEmptyParts);
-			if (tokens.size() < 3)
-			{
-				delete mesh;
-				return CC_FERR_MALFORMED_FILE;
-			}
+			DMeshLib::index_type indexes[4];
+			unsigned polyVertCount;
 
-			unsigned polyVertCount = tokens[0].toUInt(&ok);
-			if (!ok || static_cast<int>(polyVertCount) >= tokens.size())
+			bool ignoredPolygons = false;
+			for (unsigned i = 0; i < triCount; ++i)
 			{
-				delete mesh;
-				return CC_FERR_MALFORMED_FILE;
-			}
-			if (polyVertCount == 3 || polyVertCount == 4)
-			{
-				//decode indexes
-				unsigned indexes[4];
-				for (unsigned j=0; j<polyVertCount; ++j)
+				currentLine = GetNextLine(fin);
+				std::stringstream sstrm(currentLine);
+
+				sstrm >> polyVertCount;
+				if (!(sstrm >> polyVertCount))
 				{
-					indexes[j] = tokens[j+1].toUInt(&ok);
-					if (!ok)
-					{
-						delete mesh;
-						return CC_FERR_MALFORMED_FILE;
-					}
+					delete mesh;
+					mesh = nullptr;
+					return CC_FERR_MALFORMED_FILE;
 				}
 
-				//reserve memory if necessary
-				unsigned polyTriCount = polyVertCount-2;
-				if (mesh->size() + polyTriCount > mesh->capacity())
+				if (polyVertCount == 3 || polyVertCount == 4)
 				{
-					if (!mesh->reserve(mesh->size() + polyTriCount + 256)) //use some margin to avoid too many allocations
+					//decode indexes
+					for (unsigned j = 0; j < polyVertCount; ++j)
 					{
-						delete mesh;
-						return CC_FERR_NOT_ENOUGH_MEMORY;
+						if (!(sstrm >> indexes[j]))
+						{
+							delete mesh;
+							return CC_FERR_MALFORMED_FILE;
+						}
 					}
+					//triangle or quad only
+					mesh->addTriangle(indexes[0], indexes[1], indexes[2]);
+					if (polyVertCount == 4)
+						mesh->addTriangle(indexes[0], indexes[2], indexes[3]);
 				}
-
-				//triangle or quad only
-				mesh->addTriangle(indexes[0],indexes[1],indexes[2]);
-				if (polyVertCount == 4)
-					mesh->addTriangle(indexes[0],indexes[2],indexes[3]);
-
+				else
+				{
+					ignoredPolygons = true;
+				}
 			}
-			else
+
+			if (ignoredPolygons)
 			{
-				ignoredPolygons = true;
+				std::cerr<<"[OFF] Some polygons with an unhandled size (i.e. > 4) were ignored!";
 			}
 		}
 
-		if (ignoredPolygons)
+		fin.close();
+
+		if (mesh->getTriangleNumber() == 0)
 		{
-			ccLog::Warning("[OFF] Some polygons with an unhandled size (i.e. > 4) were ignored!");
+			delete mesh;
+			mesh = nullptr;
 		}
+		else
+		{
+			mesh->refreshBoundBox();
+			mesh->build();
+		}
+		container = mesh;
+		return CC_FERR_NO_ERROR;
 	}
 
-	if (mesh->size() == 0)
-	{
-		ccLog::Warning("[OFF] Failed to load any polygon!");
-		mesh->detachChild(vertices);
-		delete mesh;
-		mesh = 0;
-
-		container.addChild(vertices);
-		vertices->setEnabled(true);
-	}
-	else
-	{
-		mesh->shrinkToFit();
-
-		//DGM: normals can be per-vertex or per-triangle so it's better to let the user do it himself later
-		//Moreover it's not always good idea if the user doesn't want normals (especially in ccViewer!)
-		//if (mesh->computeNormals())
-		//	mesh->showNormals(true);
-		//else
-		//	ccLog::Warning("[OFF] Failed to compute per-vertex normals...");
-		ccLog::Warning("[OFF] Mesh has no normal! You can manually compute them (select it then call \"Edit > Normals > Compute\")");
-
-		vertices->setEnabled(false);
-		//vertices->setLocked(true); //DGM: no need to lock it as it is only used by one mesh!
-		container.addChild(mesh);
-	}
-
-	return CC_FERR_NO_ERROR;
 }

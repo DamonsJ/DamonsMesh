@@ -6,24 +6,15 @@ int main(int argc, char **argv) {
 
 	DamonsIO::FileIOFilter::InitInternalFilters();
 	
-	std::string curfilter = "stl";
-	const std::vector<std::string>	fileFilterList = DamonsIO::FileIOFilter::GetAllFilters();
-
-	for (const std::string &fileFilter : fileFilterList)
-	{
-		if (curfilter == fileFilter)
-		{
-			break;
-		}
-	}
+	auto curfilter = DamonsIO::FileIOFilter::FindBestFilterForExtension("stl");
 
 	DamonsIO::FileIOFilter::LoadParameters parameters;
 	{
 		parameters.alwaysDisplayLoadDialog = true;
 	}
 	DamonsIO::DAMONS_FILE_ERROR result = DamonsIO::CC_FERR_NO_ERROR;
-	std::string filename = "D:\\Program Files (x86)\\OpenCASCADE-7.3.0-vc14-64\\opencascade-7.3.0\\data\\stl\\bearing.stl";
-	DMeshLib::ModelObject* mesh = DamonsIO::FileIOFilter::LoadFromFile(filename,parameters, result,curfilter);
+	std::string filename = "D:\\OpenSource\\meshlab\\src\\distrib\\sample\\conrod.stl";
+	DMeshLib::ModelObject* mesh = DamonsIO::FileIOFilter::LoadFromFile(filename,parameters,curfilter, result);
 
 	if (mesh) {
 		delete mesh;

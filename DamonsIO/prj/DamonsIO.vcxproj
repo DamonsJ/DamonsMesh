@@ -70,14 +70,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VTK_ROOT)\include;$(PCL_ROOT)\include;$(BOOST_ROOT)\include;$(QT_ROOT)\include;..\DamonsDataBase\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(VTK_ROOT)\lib;$(PCL_ROOT)\lib;$(BOOST_ROOT)\lib;$(QT_ROOT)\lib;..\..\DamonsDataBase\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\DamonsDataBase\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\DamonsDataBase\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(VTK_ROOT)\lib;$(PCL_ROOT)\lib;$(BOOST_ROOT)\lib;..\..\DamonsDataBase\lib;$(QT_ROOT)\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>$(VTK_ROOT)\include;$(PCL_ROOT)\include;$(BOOST_ROOT)\include;..\DamonsDataBase\include;$(QT_ROOT)\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\DamonsDataBase\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\DamonsDataBase\include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)</OutDir>
     <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)</IntDir>
   </PropertyGroup>
@@ -134,13 +134,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\FileIOFilter.cpp" />
+    <ClCompile Include="..\src\OFFFilter.cpp" />
     <ClCompile Include="..\src\runmain.cpp" />
     <ClCompile Include="..\src\STLFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\damons_io.h" />
     <ClInclude Include="..\include\FileIOFilter.h" />
-    <ClInclude Include="..\include\qtHeaders.h" />
+    <ClInclude Include="..\include\OFFFilter.h" />
     <ClInclude Include="..\include\STLFilter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

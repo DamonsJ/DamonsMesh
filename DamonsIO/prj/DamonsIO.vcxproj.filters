@@ -24,6 +24,9 @@
     <ClCompile Include="..\src\STLFilter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\OFFFilter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\FileIOFilter.h">
@@ -32,10 +35,10 @@
     <ClInclude Include="..\include\damons_io.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\qtHeaders.h">
+    <ClInclude Include="..\include\STLFilter.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\STLFilter.h">
+    <ClInclude Include="..\include\OFFFilter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

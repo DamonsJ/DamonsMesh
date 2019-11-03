@@ -1,5 +1,6 @@
 #include "..\include\FileIOFilter.h"
 #include "..\include\STLFilter.h"
+#include "..\include\OFFFilter.h"
 #include <fstream>
 
 //system
@@ -32,6 +33,7 @@ namespace DamonsIO {
 		//Register(Shared(new AsciiFilter()));
 		//Register(Shared(new PlyFilter()));
 		Register(Shared(new STLFilter()));
+		Register(Shared(new OFFFilter()));
 		//Register(Shared(new OBJFilter()));
 	}
 
@@ -102,13 +104,13 @@ namespace DamonsIO {
 
 	FileIOFilter::Shared FileIOFilter::FindBestFilterForExtension(const std::string& ext)
 	{
-		std::string lowerEXT;
-		std::transform(ext.begin(), ext.end(), lowerEXT.begin(), ::tolower);
+		std::string lowerEXT = ext;
+		std::transform(lowerEXT.begin(), lowerEXT.end(), lowerEXT.begin(), ::tolower);
 
 		for (const auto &filter : s_ioFilters)
 		{
 			std::string otherFilters = filter->getDefaultExtension();
-			if (otherFilters == ext)
+			if (otherFilters == lowerEXT)
 				return  filter;
 		}
 
