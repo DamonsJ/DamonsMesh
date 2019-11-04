@@ -40,7 +40,7 @@ namespace DamonsIO {
 	 * \date Ê®ÔÂ 2019
 	 */
 
-	class FileIOFilter
+	class DAMONS_IO_LIB_API FileIOFilter
 	{
 	public: 
 		//initialization
@@ -175,7 +175,7 @@ namespace DamonsIO {
 		//	@return: loaded entities (or 0 if an error occurred)
 		//************************************ 
 
-		DAMONS_IO_LIB_API static DMeshLib::ModelObject* LoadFromFile(
+		static DMeshLib::ModelObject* LoadFromFile(
 														const std::string& filename,
 														LoadParameters& parameters,
 														Shared filter,
@@ -192,7 +192,7 @@ namespace DamonsIO {
 		// @param : result file error code 
 		// @param : fileFilter input filter 'file filter' (if empty, the best I/O filter will be guessed from the file extension)
 		//************************************ 
-		DAMONS_IO_LIB_API static DMeshLib::ModelObject* LoadFromFile(
+		static DMeshLib::ModelObject* LoadFromFile(
 			const std::string& filename,
 			LoadParameters& parameters,
 			DAMONS_FILE_ERROR& result,
@@ -209,7 +209,7 @@ namespace DamonsIO {
 		// param  : filter output filter
 		// return : error type(if any)
 		//************************************ 
-		DAMONS_IO_LIB_API static DAMONS_FILE_ERROR SaveToFile(
+		static DAMONS_FILE_ERROR SaveToFile(
 			DMeshLib::ModelObject* entities,
 			const std::string& filename,
 			const SaveParameters& parameters,
@@ -226,7 +226,7 @@ namespace DamonsIO {
 		// param  : fileFilter output filter 'file filter'
 		// return : error type(if any)
 		//************************************ 
-		DAMONS_IO_LIB_API static DAMONS_FILE_ERROR SaveToFile(
+		static DAMONS_FILE_ERROR SaveToFile(
 			DMeshLib::ModelObject* entities,
 			const std::string& filename,
 			const SaveParameters& parameters,
@@ -235,27 +235,27 @@ namespace DamonsIO {
 	public: //global filters registration mechanism
 
 		//! Init internal filters (should be called once)
-		DAMONS_IO_LIB_API static void InitInternalFilters();
+		static void InitInternalFilters();
 
 		//! Registers a new filter
-		DAMONS_IO_LIB_API static void Register(Shared filter);
+		static void Register(Shared filter);
 
 		//! Returns the filter corresponding to the given 'file filter'
-		DAMONS_IO_LIB_API static Shared GetFilter(const std::string& fileFilter);
+		static Shared GetFilter(const std::string& fileFilter);
 
 		//! Returns the best filter (presumably) to open a given file extension
-		DAMONS_IO_LIB_API static Shared FindBestFilterForExtension(const std::string& ext);
+		static Shared FindBestFilterForExtension(const std::string& ext);
 
 		//! Type of a I/O filters container
 		typedef std::vector< FileIOFilter::Shared > FilterContainer;
 
 		//! Returns the set of all registered filters
-		DAMONS_IO_LIB_API static const FilterContainer& GetFilters();
-		DAMONS_IO_LIB_API static const std::vector< std::string > GetAllFilters();
+		static const FilterContainer& GetFilters();
+		static const std::vector< std::string > GetAllFilters();
 		//! Unregisters all filters
 		/** Should be called at the end of the application
 		**/
-		DAMONS_IO_LIB_API static void UnregisterAll();
+		static void UnregisterAll();
 
 		//! Called when the filter is unregistered
 		/** Does nothing by default **/

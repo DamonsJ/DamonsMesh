@@ -30,13 +30,13 @@ namespace DamonsIO {
 			return CC_FERR_BAD_ARGUMENT;
 
 		DMeshLib::MeshModel* mesh = static_cast<DMeshLib::MeshModel*>(entity);
-		e_ply_storage_mode storageType = PLY_ASCII;
+		e_ply_storage_mode storageType = s_defaultOutputFormat;
 		p_ply ply = ply_create(filename.c_str(), storageType, nullptr, 0, nullptr);
 		if (!ply)
 			return CC_FERR_WRITING;
 
 		//Has the cloud been recentered?
-		e_ply_type coordType = /*PLY_DOUBLE :*/ PLY_FLOAT; //we use double coordinates for shifted vertices (i.e. >1e6)
+		e_ply_type coordType = PLY_FLOAT; //we use double coordinates for shifted vertices (i.e. >1e6)
 
 		int result = 1;
 		unsigned vertCount = mesh->getPointsNumber();
@@ -54,7 +54,7 @@ namespace DamonsIO {
 		bool hasNormals = mesh->hasNormals();
 		if (hasNormals)
 		{
-			e_ply_type normType = /*PLY_DOUBLE : */PLY_FLOAT;
+			e_ply_type normType = PLY_FLOAT;
 			result = ply_add_scalar_property(ply, "nx", normType);
 			result = ply_add_scalar_property(ply, "ny", normType);
 			result = ply_add_scalar_property(ply, "nz", normType);
@@ -699,6 +699,29 @@ namespace DamonsIO {
 			}
 		}
 
+		{
+			for (int i = 0; i < static_cast<int>(listProperties.size()); ++i)
+			{
+				plyProperty& pp = listProperties[i];
+				assert(pp.type == 16); //we only want PLY_LIST here
+
+				std::string elementName = std::string(meshElements[pp.elemIndex].elementName);
+				std::string propName = std::string(pp.propName);
+				
+				std::transform(elementName.begin(), elementName.end(), elementName.begin(), ::toupper);
+				std::transform(propName.begin(), propName.end(), propName.begin(), ::toupper);
+
+
+				if (std::string::npos != elementName.find("FACE")|| std::string::npos != elementName.find("TRI"))
+				{
+					if (facesIndex == 0 && std::string::npos != propName.find("IND"))
+						facesIndex = i + 1;
+					if (texCoordsIndex == 0 && std::string::npos != propName.find("COORD") /*&& !textureFileNames.isEmpty()*/) //no need to assign this value if we don't have any texture!
+						texCoordsIndex = i + 1;
+				}
+			}
+		}
+
 
 		/*************************/
 		/***  Callbacks setup  ***/
@@ -714,6 +737,7 @@ namespace DamonsIO {
 		if (xIndex > 0)
 		{
 			long flags = ELEM_POS_0; //X coordinate
+			if (yIndex > xIndex && yIndex > zIndex)
 				flags |= ELEM_EOL;
 
 			plyProperty& pp = stdProperties[xIndex - 1];
@@ -1026,6 +1050,14 @@ namespace DamonsIO {
 			mesh->refreshBoundBox();
 			mesh->build();
 		}
+		
+		std::vector<plyElement>().swap(pointElements);
+		std::vector<plyElement>().swap(meshElements);
+		std::vector<plyProperty>().swap(stdProperties);
+		std::vector<plyProperty>().swap(listProperties);
+		std::vector<plyProperty>().swap(singleProperties);
+
+		container = mesh;
 
 		return CC_FERR_NO_ERROR;
 	}

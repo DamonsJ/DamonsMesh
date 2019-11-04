@@ -1,6 +1,7 @@
 #include "..\include\FileIOFilter.h"
 #include "..\include\STLFilter.h"
 #include "..\include\OFFFilter.h"
+#include "..\include\PlyFilter.h"
 #include <fstream>
 
 //system
@@ -31,7 +32,7 @@ namespace DamonsIO {
 	{
 		//from the most useful to the less one!
 		//Register(Shared(new AsciiFilter()));
-		//Register(Shared(new PlyFilter()));
+		Register(Shared(new PlyFilter()));
 		Register(Shared(new STLFilter()));
 		Register(Shared(new OFFFilter()));
 		//Register(Shared(new OBJFilter()));
@@ -238,10 +239,10 @@ namespace DamonsIO {
 			result = CC_FERR_CONSOLE_ERROR;
 		}
 
-		if (result == CC_FERR_NO_ERROR)
-		{
-			std::cout << "[I/O] File '%1' saved successfully" + filename << std::endl;
-		}
+// 		if (result == CC_FERR_NO_ERROR)
+// 		{
+// 			std::cout << "[I/O] File '%1' saved successfully" + filename << std::endl;
+// 		}
 
 		return result;
 	}
