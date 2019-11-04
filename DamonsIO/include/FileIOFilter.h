@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "..\include\damons_io.h"
-#include "..\include\qtHeaders.h"
 
 #include "..\..\DamonsDataBase\include\ModelObject.h"
 

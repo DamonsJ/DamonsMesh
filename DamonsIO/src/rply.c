@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-#include "rply.h"
+#include "..\include\rply.h"
 
 /* ----------------------------------------------------------------------
  * Make sure we get our integer types right

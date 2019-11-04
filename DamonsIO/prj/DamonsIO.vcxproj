@@ -87,7 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;DAMONS_DB_USE_AS_DLL;DAMONS_DB_LIB_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;DAMONS_DB_USE_AS_DLL;DAMONS_DB_LIB_EXPORTS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -124,7 +124,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -135,6 +135,8 @@
   <ItemGroup>
     <ClCompile Include="..\src\FileIOFilter.cpp" />
     <ClCompile Include="..\src\OFFFilter.cpp" />
+    <ClCompile Include="..\src\PlyFilter.cpp" />
+    <ClCompile Include="..\src\rply.c" />
     <ClCompile Include="..\src\runmain.cpp" />
     <ClCompile Include="..\src\STLFilter.cpp" />
   </ItemGroup>
@@ -142,6 +144,8 @@
     <ClInclude Include="..\include\damons_io.h" />
     <ClInclude Include="..\include\FileIOFilter.h" />
     <ClInclude Include="..\include\OFFFilter.h" />
+    <ClInclude Include="..\include\PlyFilter.h" />
+    <ClInclude Include="..\include\rply.h" />
     <ClInclude Include="..\include\STLFilter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
