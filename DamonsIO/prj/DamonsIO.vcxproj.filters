@@ -33,6 +33,9 @@
     <ClCompile Include="..\src\rply.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ObjFilter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\FileIOFilter.h">
@@ -51,6 +54,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\include\rply.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ObjFilter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

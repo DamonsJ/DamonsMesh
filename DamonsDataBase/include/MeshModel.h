@@ -139,6 +139,19 @@ namespace DMeshLib {
 			p = m_meshPoints[index];
 		}
 
+		// get point
+		void getNormal(unsigned int index, data_type &x, data_type &y, data_type &z) {
+			assert(index < m_meshNormals.size());
+			x = m_meshNormals[index].x();
+			y = m_meshNormals[index].y();
+			z = m_meshNormals[index].z();
+		}
+
+		void getNormal(unsigned int index, DMeshLib::MeshModel::DamonsNormal &p) {
+			assert(index < m_meshNormals.size());
+			p = m_meshNormals[index];
+		}
+
 		// get triangle
 		void getTriangleIndex(unsigned int index, index_type &index1, index_type &index2, index_type &index3) {
 			assert(index < m_meshIndex.size());

@@ -45,6 +45,10 @@ namespace DamonsIO {
 	class DAMONS_IO_LIB_API PlyFilter : public FileIOFilter
 	{
 	public:
+		PlyFilter() :FileIOFilter() {
+			uid = "PLY_Filter";
+		}
+	public:
 
 		//static accessors
 		static inline std::string GetFileFilter() { return "PLY mesh (*.ply)"; }

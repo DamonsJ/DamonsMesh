@@ -11,6 +11,10 @@ namespace DamonsIO {
 	class DAMONS_IO_LIB_API OFFFilter : public FileIOFilter
 	{
 	public:
+		OFFFilter() :FileIOFilter() {
+			uid = "OFF_Filter";
+		}
+	public:
 
 		//inherited from FileIOFilter
 		virtual bool importSupported() const override { return true; }

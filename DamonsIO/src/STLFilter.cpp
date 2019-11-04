@@ -22,7 +22,7 @@ namespace DamonsIO {
 		DMeshLib::MeshModel* mesh = static_cast<DMeshLib::MeshModel*>(entity);
 		if (!mesh || mesh->getTriangleNumber() == 0)
 		{
-			return CC_FERR_NO_ERROR;
+			return CC_FERR_NO_SAVE;
 		}
 
 		//ask for output format

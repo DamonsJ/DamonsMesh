@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\FileIOFilter.cpp" />
+    <ClCompile Include="..\src\ObjFilter.cpp" />
     <ClCompile Include="..\src\OFFFilter.cpp" />
     <ClCompile Include="..\src\PlyFilter.cpp" />
     <ClCompile Include="..\src\rply.c" />
@@ -143,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="..\include\damons_io.h" />
     <ClInclude Include="..\include\FileIOFilter.h" />
+    <ClInclude Include="..\include\ObjFilter.h" />
     <ClInclude Include="..\include\OFFFilter.h" />
     <ClInclude Include="..\include\PlyFilter.h" />
     <ClInclude Include="..\include\rply.h" />
