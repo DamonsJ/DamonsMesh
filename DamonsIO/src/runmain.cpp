@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
 	{
 		sparameters.alwaysDisplaySaveDialog = true;
 	}
-	DamonsIO::FileIOFilter::SaveToFile(mesh, "../data/test.ply", sparameters, curfilter);
+	DamonsIO::FileIOFilter::SaveToFile(mesh, "../data/test.obj", sparameters, curfilter);
 
 	if (mesh) {
 		delete mesh;

@@ -50,6 +50,7 @@ namespace DamonsIO {
 			}
 		}
 
+		ostream << "#" << nbPoints << " points" << std::endl << std::endl;
 		//mesh or sub-meshes
 		
 		unsigned triNum = mesh->getTriangleNumber();
@@ -58,7 +59,10 @@ namespace DamonsIO {
 		for (unsigned i = 0; i < triNum; ++i)
 		{
 			mesh->getTriangleIndex(i, id1, id2, id3);
-			
+			id1++;
+			id2++;
+			id3++;
+
 			ostream << "f";
 			if (withNormals)
 			{
@@ -486,6 +490,8 @@ namespace DamonsIO {
 							baseMesh->addTriangleNormalIndexes(A->nIndex, B->nIndex, C->nIndex);
 						*/
 					}
+
+					std::vector<facetElement>().swap(currentFace);
 				}
 				/*** polyline ***/
 				else if (keyword == "l")
