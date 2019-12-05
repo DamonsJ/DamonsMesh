@@ -70,14 +70,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\DamonsDataBase\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\DamonsDataBase\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\DamonsDataBase\include;..\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\DamonsDataBase\lib;..\lib\$(Platform)\$(Configuration);..\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>..\..\DamonsDataBase\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\DamonsDataBase\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\DamonsDataBase\lib;..\lib\$(Platform)\$(Configuration);..\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\DamonsDataBase\include;..\include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)</OutDir>
     <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)</IntDir>
   </PropertyGroup>
@@ -87,11 +87,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;DAMONS_DB_USE_AS_DLL;DAMONS_DB_LIB_EXPORTS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;DAMONS_DB_USE_AS_DLL;DAMONS_DB_LIB_EXPORTS;NOMINMAX;LIB3DS_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>DamonsDataBase-gd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DamonsDataBase-gd.lib;3ds.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -124,15 +124,16 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DAMONS_IO_USE_AS_DLL;DAMONS_IO_LIB_EXPORTS;_CRT_SECURE_NO_WARNINGS;NOMINMAX;LIB3DS_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>DamonsDataBase.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DamonsDataBase.lib;3ds.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\3DSFilter.cpp" />
     <ClCompile Include="..\src\FileIOFilter.cpp" />
     <ClCompile Include="..\src\ObjFilter.cpp" />
     <ClCompile Include="..\src\OFFFilter.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="..\src\STLFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\3DSFilter.h" />
     <ClInclude Include="..\include\damons_io.h" />
     <ClInclude Include="..\include\FileIOFilter.h" />
     <ClInclude Include="..\include\ObjFilter.h" />
