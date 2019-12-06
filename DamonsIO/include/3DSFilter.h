@@ -16,6 +16,7 @@
 
 namespace DamonsIO {
 	//! 3ds file filter
+	// see also http://lib3ds.sourceforge.net/
 
 	class DAMONS_IO_LIB_API TDSFilter : public FileIOFilter
 	{

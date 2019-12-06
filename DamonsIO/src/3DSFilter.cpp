@@ -20,14 +20,64 @@ namespace DamonsIO {
 			return CC_FERR_BAD_ENTITY_TYPE;
 
 		DMeshLib::MeshModel* mesh = static_cast<DMeshLib::MeshModel*>(entity);
-		if (!mesh || mesh->getTriangleNumber() == 0)
+		if (!mesh || mesh->getTriangleNumber() == 0 || mesh->getPointsNumber() == 0)
 		{
 			return CC_FERR_NO_SAVE;
 		}
 
-		DAMONS_FILE_ERROR result = CC_FERR_NO_ERROR;
+		////check max polygons
+		//if (mesh->getPointsNumber() > 65535)
+		//	return CC_FERR_BAD_ARGUMENT;
 
-		return result;
+		Lib3dsFile *file = lib3ds_file_new();//creates new file
+		Lib3dsMesh *_dmesh = lib3ds_mesh_new("mesh");//creates a new mesh with mesh's name "mesh"		
+
+		unsigned vertCount = mesh->getPointsNumber();
+		unsigned triCount = mesh->getTriangleNumber();
+
+		{
+			lib3ds_mesh_new_point_list(_dmesh, vertCount);// set number of vertexs
+
+			DMeshLib::data_type x, y, z;
+			for (unsigned i = 0; i < vertCount; ++i)
+			{
+				mesh->getPoint(i, x, y, z);
+				Lib3dsPoint point;
+				point.pos[0] = x;
+				point.pos[1] = y;
+				point.pos[2] = z;
+
+				_dmesh->pointL[i] = point;
+			}
+		}
+		{
+			lib3ds_mesh_new_face_list(_dmesh, triCount);//set number of faces
+			DMeshLib::index_type id1, id2, id3;
+			for (unsigned i = 0; i < triCount; ++i)
+			{
+				mesh->getTriangleIndex(i, id1, id2, id3);
+				Lib3dsFace face;
+				face.points[0] = (Lib3dsWord)id1;
+				face.points[1] = (Lib3dsWord)id2;
+				face.points[2] = (Lib3dsWord)id3;
+				face.smoothing = 10;
+
+				_dmesh->faceL[i] = face;
+			}
+		}
+		
+		lib3ds_file_insert_mesh(file, _dmesh);//inserts the Mesh into file
+
+		Lib3dsNode *node = lib3ds_node_new_object();//creates a new node
+		strcpy(node->name, mesh->getName().c_str());
+		node->parent_id = LIB3DS_NO_PARENT;
+		lib3ds_file_insert_node(file, node);//inserts the node into file
+
+		bool result = lib3ds_file_save(file, filename.c_str()); //saves the file
+		if (!result)
+			return CC_FERR_WRITING;
+
+		return CC_FERR_NO_ERROR;
 	}
 
   

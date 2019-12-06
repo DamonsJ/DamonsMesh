@@ -3,6 +3,7 @@
 #include "..\include\OFFFilter.h"
 #include "..\include\PlyFilter.h"
 #include "..\include\ObjFilter.h"
+#include "..\include\3DSFilter.h"
 
 #include <fstream>
 
@@ -38,6 +39,8 @@ namespace DamonsIO {
 		Register(Shared(new STLFilter()));
 		Register(Shared(new OFFFilter()));
 		Register(Shared(new ObjFilter()));
+		Register(Shared(new TDSFilter()));
+
 	}
 
 	void FileIOFilter::Register(Shared filter)
