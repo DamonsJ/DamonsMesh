@@ -17,6 +17,7 @@
 namespace DamonsIO {
 	//! 3ds file filter
 	// see also http://lib3ds.sourceforge.net/
+#define MAX_POLYGON_3DS 65535
 
 	class DAMONS_IO_LIB_API TDSFilter : public FileIOFilter
 	{

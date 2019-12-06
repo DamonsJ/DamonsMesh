@@ -25,12 +25,12 @@ namespace DamonsIO {
 			return CC_FERR_NO_SAVE;
 		}
 
-		////check max polygons
-		//if (mesh->getPointsNumber() > 65535)
-		//	return CC_FERR_BAD_ARGUMENT;
+		//check max polygons
+		if (mesh->getPointsNumber() > MAX_POLYGON_3DS)
+			return CC_FERR_BAD_ARGUMENT;
 
 		Lib3dsFile *file = lib3ds_file_new();//creates new file
-		Lib3dsMesh *_dmesh = lib3ds_mesh_new("mesh");//creates a new mesh with mesh's name "mesh"		
+		Lib3dsMesh *_dmesh = lib3ds_mesh_new(mesh->getName().c_str());//creates a new mesh with mesh's name "mesh"		
 
 		unsigned vertCount = mesh->getPointsNumber();
 		unsigned triCount = mesh->getTriangleNumber();
@@ -60,7 +60,11 @@ namespace DamonsIO {
 				face.points[0] = (Lib3dsWord)id1;
 				face.points[1] = (Lib3dsWord)id2;
 				face.points[2] = (Lib3dsWord)id3;
+
+				face.flags = 65535;
 				face.smoothing = 10;
+				face.user.p = (void*)malloc(1);
+				strcpy(face.material,"");
 
 				_dmesh->faceL[i] = face;
 			}
