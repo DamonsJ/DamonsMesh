@@ -263,9 +263,7 @@ namespace DamonsIO {
 			mesh->addPoint(f.v2[0], f.v2[1], f.v2[2]);
 			mesh->addPoint(f.v3[0], f.v3[1], f.v3[2]);
 
-			mesh->addNormal(f.n[0], f.n[1], f.n[2]);
-			mesh->addNormal(f.n[0], f.n[1], f.n[2]);
-			mesh->addNormal(f.n[0], f.n[1], f.n[2]);
+			mesh->addFaceNormal(f.n[0], f.n[1], f.n[2]);
 
 			mesh->addTriangle(cnt, cnt + 1, cnt + 2);
 			cnt = cnt + 3;
@@ -293,7 +291,7 @@ namespace DamonsIO {
 
 		mesh->ResizePoints(facenum * 3);
 		mesh->ResizeTriangles(facenum);
-		mesh->ResizeNormals(facenum * 3);
+		mesh->ResizeFaceNormals(facenum );
 
 		// For each triangle read the normal, the three coords and a short set to zero
 		for (int i = 0; i < facenum; ++i)
@@ -309,10 +307,8 @@ namespace DamonsIO {
 			mesh->setPoint(3 * i + 1, tri[3], tri[4], tri[5]);
 			mesh->setPoint(3 * i + 2, tri[6], tri[7], tri[8]);
 
-			mesh->setNormal(3 * i, norm[0], norm[1], norm[2]);
-			mesh->setNormal(3 * i + 1, norm[0], norm[1], norm[2]);
-			mesh->setNormal(3 * i + 2, norm[0], norm[1], norm[2]);
-
+			mesh->setFaceNormal(3 * i, norm[0], norm[1], norm[2]);
+			
 			mesh->setTriangle(i, 3 * i, 3 * i + 1, 3 * i + 2);
 		}
 		fclose(fp);

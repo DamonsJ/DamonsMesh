@@ -11,7 +11,7 @@ namespace DMeshLib {
 	MeshModel::MeshModel(const MeshModel& object) : ModelObject(object) {
 		std::copy(object.m_meshPoints.begin(), object.m_meshPoints.end(), std::back_inserter(m_meshPoints));
 		std::copy(object.m_meshIndex.begin(), object.m_meshIndex.end(), std::back_inserter(m_meshIndex));
-		std::copy(object.m_meshNormals.begin(), object.m_meshNormals.end(), std::back_inserter(m_meshNormals));
+		std::copy(object.m_meshPointNormals.begin(), object.m_meshPointNormals.end(), std::back_inserter(m_meshPointNormals));
 		
 #ifdef __BUILD_HALFEDGE_TOPO__
 		build();
@@ -22,7 +22,7 @@ namespace DMeshLib {
 	MeshModel::~MeshModel() {
 		std::vector<DamonsVertex >().swap(m_meshPoints);
 		std::vector<DamonsFace >().swap(m_meshIndex);
-		std::vector<DamonsNormal >().swap(m_meshNormals);
+		std::vector<DamonsNormal >().swap(m_meshPointNormals);
 		std::vector<DamonsHalfEdge >().swap(m_halfedges);
 
 		m_edgePairs.clear();

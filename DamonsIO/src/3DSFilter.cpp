@@ -240,6 +240,13 @@ namespace DamonsIO {
 					DMeshLib::index_type  id3 = static_cast<DMeshLib::index_type>(numVertices + f->points[2]);
 
 					_dmesh->addTriangle(id1,id2,id3);
+
+					DMeshLib::data_type  nx = static_cast<DMeshLib::data_type>(f->normal[0]);
+					DMeshLib::data_type  ny = static_cast<DMeshLib::data_type>(f->normal[1]);
+					DMeshLib::data_type  nz = static_cast<DMeshLib::data_type>(f->normal[2]);
+
+					_dmesh->addFaceNormal(nx, ny, nz);
+
 					++numFaces;
 				}
 

@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 		parameters.alwaysDisplayLoadDialog = true;
 	}
 	DamonsIO::DAMONS_FILE_ERROR result = DamonsIO::CC_FERR_NO_ERROR;
-	std::string filename = "../data/SaddleCos.3ds";
+	std::string filename = "../data/testr.3ds";
 	DMeshLib::ModelObject* mesh = DamonsIO::FileIOFilter::LoadFromFile(filename,parameters,curfilter, result);
 	
 	std::cout << "read file end" << std::endl;

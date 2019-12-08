@@ -51,7 +51,7 @@ namespace DamonsIO {
 		else result = 0;
 
 		//Normals (nx,ny,nz)
-		bool hasNormals = mesh->hasNormals();
+		bool hasNormals = mesh->hasPointNormals();
 		if (hasNormals)
 		{
 			e_ply_type normType = PLY_FLOAT;
@@ -203,7 +203,7 @@ namespace DamonsIO {
 
 		if (flags & ELEM_EOL)
 		{
-			mesh->addNormal(s_Normal[0], s_Normal[1], s_Normal[2]);
+			mesh->addPointNormal(s_Normal[0], s_Normal[1], s_Normal[2]);
 			++s_NormalCount;
 		}
 

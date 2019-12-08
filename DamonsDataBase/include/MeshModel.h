@@ -26,7 +26,10 @@ namespace DMeshLib {
 		std::vector<DamonsFace > m_meshIndex;
 		// point normals
 		using DamonsNormal = DGraphic::DPoint<DMeshLib::data_type>;
-		std::vector<DamonsNormal > m_meshNormals;
+		std::vector<DamonsNormal > m_meshPointNormals;
+		// face normals
+		std::vector<DamonsNormal > m_meshFaceNormals;
+
 		//all the half-edges 
 		std::vector<DamonsHalfEdge > m_halfedges;
 		using halfedge_pairs = std::map< std::pair<DMeshLib::index_type, DMeshLib::index_type>, DMeshLib::index_type >;
@@ -72,7 +75,8 @@ namespace DMeshLib {
 		// resize container size 
 		void ResizePoints(unsigned int nbpt) { m_meshPoints.resize(nbpt); }
 		void ResizeTriangles(unsigned int nbpt) { m_meshIndex.resize(nbpt); }
-		void ResizeNormals(unsigned int nbpt) { m_meshNormals.resize(nbpt); }
+		void ResizePointNormals(unsigned int nbpt) { m_meshPointNormals.resize(nbpt); }
+		void ResizeFaceNormals(unsigned int nbpt) { m_meshFaceNormals.resize(nbpt); }
 		// add and set point value
 		void addPoint(data_type x, data_type y, data_type z) {
 			DMeshLib::DamonsVertex p(x,y,z);
@@ -112,15 +116,23 @@ namespace DMeshLib {
 			m_meshIndex[i].point_ids[2] = id3;
 			m_meshIndex[i].id = i;
 		}
-		// add and set normal value
-		void addNormal(data_type x, data_type y, data_type z) { m_meshNormals.push_back(DGraphic::DPoint<data_type>(x, y, z)); }
-		void addNormal(DGraphic::DPoint<data_type> p) { m_meshNormals.push_back(p); }
+		// add and set point normal value
+		void addPointNormal(data_type x, data_type y, data_type z) { m_meshPointNormals.push_back(DGraphic::DPoint<data_type>(x, y, z)); }
+		void addPointNormal(DGraphic::DPoint<data_type> p) { m_meshPointNormals.push_back(p); }
 
-		void setNormal(unsigned i, data_type x, data_type y, data_type z) {
-			m_meshNormals[i] = DGraphic::DPoint<data_type>(x, y, z);
+		void setPointNormal(unsigned i, data_type x, data_type y, data_type z) {
+			m_meshPointNormals[i] = DGraphic::DPoint<data_type>(x, y, z);
 		}
-		void setNormal(unsigned i, DGraphic::DPoint<data_type> p) { m_meshNormals[i] = p; }
+		void setPointNormal(unsigned i, DGraphic::DPoint<data_type> p) { m_meshPointNormals[i] = p; }
+		
+		// add and set face normal value
+		void addFaceNormal(data_type x, data_type y, data_type z) { m_meshFaceNormals.push_back(DGraphic::DPoint<data_type>(x, y, z)); }
+		void addFaceNormal(DGraphic::DPoint<data_type> p) { m_meshFaceNormals.push_back(p); }
 
+		void setFaceNormal(unsigned i, data_type x, data_type y, data_type z) {
+			m_meshFaceNormals[i] = DGraphic::DPoint<data_type>(x, y, z);
+		}
+		void setFaceNormal(unsigned i, DGraphic::DPoint<data_type> p) { m_meshFaceNormals[i] = p; }
 	public:
 		// get triangle numbers
 		unsigned int getTriangleNumber() const { return m_meshIndex.size(); }
@@ -139,17 +151,30 @@ namespace DMeshLib {
 			p = m_meshPoints[index];
 		}
 
-		// get point
-		void getNormal(unsigned int index, data_type &x, data_type &y, data_type &z) {
-			assert(index < m_meshNormals.size());
-			x = m_meshNormals[index].x();
-			y = m_meshNormals[index].y();
-			z = m_meshNormals[index].z();
+		// get point normal
+		void getPointNormal(unsigned int index, data_type &x, data_type &y, data_type &z) {
+			assert(index < m_meshPointNormals.size());
+			x = m_meshPointNormals[index].x();
+			y = m_meshPointNormals[index].y();
+			z = m_meshPointNormals[index].z();
 		}
 
-		void getNormal(unsigned int index, DMeshLib::MeshModel::DamonsNormal &p) {
-			assert(index < m_meshNormals.size());
-			p = m_meshNormals[index];
+		void getPointNormal(unsigned int index, DMeshLib::MeshModel::DamonsNormal &p) {
+			assert(index < m_meshPointNormals.size());
+			p = m_meshPointNormals[index];
+		}
+
+		// get face normal
+		void getFaceNormal(unsigned int index, data_type &x, data_type &y, data_type &z) {
+			assert(index < m_meshFaceNormals.size());
+			x = m_meshFaceNormals[index].x();
+			y = m_meshFaceNormals[index].y();
+			z = m_meshFaceNormals[index].z();
+		}
+
+		void getFaceNormal(unsigned int index, DMeshLib::MeshModel::DamonsNormal &p) {
+			assert(index < m_meshFaceNormals.size());
+			p = m_meshFaceNormals[index];
 		}
 
 		// get triangle
@@ -205,8 +230,11 @@ namespace DMeshLib {
 		// @return: void
 		// @param : void  
 		//************************************ 
-		bool hasNormals() const {
-			return m_meshNormals.size() > 0;
+		bool hasPointNormals() const {
+			return m_meshPointNormals.size() > 0;
+		}
+		bool hasFaceNormals() const {
+			return m_meshFaceNormals.size() > 0;
 		}
 	public:
 		//////////////////////////////////////////////////////////////////////////

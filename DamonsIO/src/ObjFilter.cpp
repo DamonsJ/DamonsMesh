@@ -40,12 +40,12 @@ namespace DamonsIO {
 		}
 
 		//normals
-		bool withNormals = mesh->hasNormals();
+		bool withNormals = mesh->hasPointNormals();
 		if (withNormals)
 		{
 			for (unsigned i = 0; i < nbPoints; ++i)
 			{
-				mesh->getNormal(i, x, y, z);
+				mesh->getPointNormal(i, x, y, z);
 				ostream << "vn " << x << " " << y << " " << z << std::endl;
 			}
 		}
@@ -294,7 +294,7 @@ namespace DamonsIO {
 					}
 
 					
-					mesh->addNormal(x, y, z);
+					mesh->addPointNormal(x, y, z);
 					++normsRead;
 				}
 				/*** new group ***/

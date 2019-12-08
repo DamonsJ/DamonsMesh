@@ -78,8 +78,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>..\..\DamonsDataBase\lib;..\lib\$(Platform)\$(Configuration);..\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>..\..\DamonsDataBase\include;..\include;$(IncludePath)</IncludePath>
-    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)</OutDir>
-    <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)</IntDir>
+    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
