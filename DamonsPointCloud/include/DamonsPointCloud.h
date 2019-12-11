@@ -7,6 +7,7 @@ VTK_MODULE_INIT(vtkInteractionStyle);
 #include <QtWidgets/QMainWindow>
 #include "ui_DamonsPointCloud.h"
 #include <QFileDialog>
+#include "../../DamonsIO/include/FileIOFilter.h"
 
 class DamonsPointCloud : public QMainWindow
 {

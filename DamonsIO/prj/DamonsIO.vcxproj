@@ -39,7 +39,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -74,6 +74,7 @@
     <LibraryPath>..\..\DamonsDataBase\lib;..\lib\$(Platform)\$(Configuration);..\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)..\temp\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-gd</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>..\..\DamonsDataBase\lib;..\lib\$(Platform)\$(Configuration);..\lib;$(LibraryPath)</LibraryPath>
@@ -93,6 +94,11 @@
     <Link>
       <AdditionalDependencies>DamonsDataBase-gd.lib;3ds.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsPointCloud\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCloud\bin\$(Platform)\$(Configuration) /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -131,6 +137,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>DamonsDataBase.lib;3ds.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsPointCloud\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCloud\bin\$(Platform)\$(Configuration) /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\3DSFilter.cpp" />

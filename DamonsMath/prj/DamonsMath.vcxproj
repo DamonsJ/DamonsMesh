@@ -86,7 +86,9 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <PostBuildEvent>
-      <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y</Command>
+      <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsPointCloud\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCloud\bin\$(Platform)\$(Configuration) /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -125,7 +127,9 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y</Command>
+      <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsPointCloud\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCloud\bin\$(Platform)\$(Configuration) /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

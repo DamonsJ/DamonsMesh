@@ -54,17 +54,18 @@ void DamonsPointCloud::doActionLoadFile()
 	fileFilters.append(DPCSettings::AllFileFilters());
 	bool defaultFilterFound = false;
 	{
-		for (const FileIOFilter::Shared &filter : FileIOFilter::GetFilters())
+		for (const DamonsIO::FileIOFilter::Shared &filter : DamonsIO::FileIOFilter::GetFilters())
 		{
 			if (filter->importSupported())
 			{
-				const QStringList	fileFilterList = filter->getFileFilters(true);
+				std::vector<std::string>	fileFilterList = filter->getFileFilters();
 
-				for (const QString &fileFilter : fileFilterList)
+				for (const std::string &fileFilter : fileFilterList)
 				{
-					fileFilters.append(fileFilter);
+					QString cf = QString::fromStdString(fileFilter);
+					fileFilters.append(cf);
 					//is it the (last) default filter?
-					if (!defaultFilterFound && (currentOpenDlgFilter == fileFilter))
+					if (!defaultFilterFound && (currentOpenDlgFilter == cf))
 					{
 						defaultFilterFound = true;
 					}
