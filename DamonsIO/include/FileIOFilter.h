@@ -175,11 +175,10 @@ namespace DamonsIO {
 		//	@return: loaded entities (or 0 if an error occurred)
 		//************************************ 
 
-		static DMeshLib::ModelObject* LoadFromFile(
-														const std::string& filename,
-														LoadParameters& parameters,
-														Shared filter,
-														DAMONS_FILE_ERROR& result);
+		static DMeshLib::ModelObject* LoadFromFile( const std::string& filename,
+													LoadParameters& parameters,
+													Shared filter,
+													DAMONS_FILE_ERROR& result);
 
 		//************************************  
 		// @brief : Loads one or more entities from a file with known type 
@@ -192,11 +191,10 @@ namespace DamonsIO {
 		// @param : result file error code 
 		// @param : fileFilter input filter 'file filter' (if empty, the best I/O filter will be guessed from the file extension)
 		//************************************ 
-		static DMeshLib::ModelObject* LoadFromFile(
-			const std::string& filename,
-			LoadParameters& parameters,
-			DAMONS_FILE_ERROR& result,
-			std::string fileFilter = "");
+		static DMeshLib::ModelObject* LoadFromFile( const std::string& filename,
+													LoadParameters& parameters,
+													DAMONS_FILE_ERROR& result,
+													std::string fileFilter = "");
 
 		//************************************  
 		// @brief : Saves an entity (or a group of) to a specific file thanks to a given filter 
@@ -209,11 +207,10 @@ namespace DamonsIO {
 		// param  : filter output filter
 		// return : error type(if any)
 		//************************************ 
-		static DAMONS_FILE_ERROR SaveToFile(
-			DMeshLib::ModelObject* entities,
-			const std::string& filename,
-			const SaveParameters& parameters,
-			Shared filter);
+		static DAMONS_FILE_ERROR SaveToFile(DMeshLib::ModelObject* entities,
+											const std::string& filename,
+											const SaveParameters& parameters,
+											Shared filter);
 
 		//************************************  
 		// @brief : Saves an entity (or a group of) to a specific file thanks to a given filter 
@@ -226,11 +223,10 @@ namespace DamonsIO {
 		// param  : fileFilter output filter 'file filter'
 		// return : error type(if any)
 		//************************************ 
-		static DAMONS_FILE_ERROR SaveToFile(
-			DMeshLib::ModelObject* entities,
-			const std::string& filename,
-			const SaveParameters& parameters,
-			const std::string& fileFilter);
+		static DAMONS_FILE_ERROR SaveToFile(DMeshLib::ModelObject* entities,
+											const std::string& filename,
+											const SaveParameters& parameters,
+											const std::string& fileFilter);
 
 	public: //global filters registration mechanism
 

@@ -3,7 +3,7 @@
 
 #include "DamonsVector.h"
 #include "DamonsMatrix.h"
-namespace DMath {
+namespace DGraphic {
 
 	/// @class Quaternion
 	///

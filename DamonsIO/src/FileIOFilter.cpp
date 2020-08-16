@@ -40,7 +40,6 @@ namespace DamonsIO {
 		Register(Shared(new OFFFilter()));
 		Register(Shared(new ObjFilter()));
 		Register(Shared(new TDSFilter()));
-
 	}
 
 	void FileIOFilter::Register(Shared filter)

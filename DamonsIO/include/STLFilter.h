@@ -30,6 +30,12 @@ namespace DamonsIO {
 		virtual bool canLoadExtension(const std::string& upperCaseExt) const override;
 
 	protected:
+		/**
+		 * @brief check whether stl is binary or not
+		 * 
+		 * @param filename stl file name
+		 * @return true if file is binary, otherwise false 
+		 */
 		bool IsSTLBinary(const char * filename);
 		//! Custom save method
 		DAMONS_FILE_ERROR saveToASCIIFile(DMeshLib::MeshModel* mesh, FILE *theFile);
