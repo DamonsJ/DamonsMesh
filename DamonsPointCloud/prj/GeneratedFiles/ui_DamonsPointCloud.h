@@ -70,12 +70,12 @@ public:
         actionOpen = new QAction(DamonsPointCloudClass);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8("Resources/folder.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8("../Resources/folder.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionOpen->setIcon(icon1);
         actionOpen_Recent = new QAction(DamonsPointCloudClass);
         actionOpen_Recent->setObjectName(QString::fromUtf8("actionOpen_Recent"));
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8("Resources/Places_folder_recent.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8("../Resources/Places_folder_recent.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionOpen_Recent->setIcon(icon2);
         centralWidget = new QWidget(DamonsPointCloudClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));

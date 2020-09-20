@@ -176,7 +176,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset>
-     <normaloff>Resources/folder.png</normaloff>Resources/folder.png</iconset>
+     <normaloff>../Resources/folder.png</normaloff>../Resources/folder.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open</string>
@@ -197,7 +197,7 @@
   <action name="actionOpen_Recent">
    <property name="icon">
     <iconset>
-     <normaloff>Resources/Places_folder_recent.png</normaloff>Resources/Places_folder_recent.png</iconset>
+     <normaloff>../Resources/Places_folder_recent.png</normaloff>../Resources/Places_folder_recent.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open Recent</string>
