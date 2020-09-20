@@ -87,8 +87,8 @@
     </ClCompile>
     <PostBuildEvent>
       <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y
-xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsPointCloud\lib /y
-xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCloud\bin\$(Platform)\$(Configuration) /y</Command>
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsMesh\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsMesh\bin\$(Platform)\$(Configuration) /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,8 +128,8 @@ xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCl
     </Link>
     <PostBuildEvent>
       <Command>xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\lib /y
-xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsPointCloud\lib /y
-xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsPointCloud\bin\$(Platform)\$(Configuration) /y</Command>
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.lib ..\..\DamonsMesh\lib /y
+xcopy $(ProjectDir)..\bin\$(Platform)\$(Configuration)\*.dll ..\..\DamonsMesh\bin\$(Platform)\$(Configuration) /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

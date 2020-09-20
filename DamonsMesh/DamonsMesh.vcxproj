@@ -33,6 +33,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\temp\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(QT_ROOT)\include;$(QT_ROOT)\include\QtWidgets;$(QT_ROOT)\include\QtCore;$(VTK_ROOT)\include;..\DamonsIO\include;..\DamonsDataBase\include;.\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(QT_ROOT)\lib;$(VTK_ROOT)\lib;.\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
@@ -71,6 +73,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>qtmaind.lib;QVTKWidgetPlugin-gd.lib;DamonsDataBase-gd.lib;DamonsIO-gd.lib;Qt5Cored.lib;Qt5Guid.lib;Qt5Widgetsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
